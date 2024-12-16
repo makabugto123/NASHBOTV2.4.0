@@ -18,7 +18,7 @@ module.exports = {
             (err, info) => {
                 if (err) return;
 
-                axios.get(`https://sim.up.railway.app/nash?prompt=${encodeURIComponent(prompt)}&apiKey=nsh-82f0bfcb102a623e5b415b51538b723c`)
+                axios.get(`https://nash-simsimi.onrender.com/nash?prompt=${encodeURIComponent(prompt)}&apiKey=nsh-24cd044e99b555e6e59015a2b2407239`)
                     .then(response => {
                         const reply = response.data.response;
                         api.editMessage(`[ Nash SimiSimi ]\n\n${reply}`, info.messageID);

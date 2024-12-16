@@ -22,7 +22,7 @@ module.exports = {
             (err, info) => {
                 if (err) return;
 
-                axios.get(`https://sim.up.railway.app/teach`, {
+                axios.get(`https://nash-simsimi.onrender.com/teach`, {
                     params: {
                         question: question,
                         answer: answer

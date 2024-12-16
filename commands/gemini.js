@@ -1,12 +1,12 @@
 const axios = require("axios");
 
 module.exports = {
-    name: "ai",
-    description: "interact with gpt4",
+    name: "gemini",
+    description: "interact with Gemini",
     nashPrefix: false,
     version: "1.0.0",
     cooldowns: 5,
-    aliases: ["ai"],
+    aliases: ["gemini"],
     execute(api, event, args, prefix) {
         const { threadID, messageID, senderID } = event;
         let prompt = args.join(" ");
@@ -20,13 +20,13 @@ module.exports = {
         }
 
         api.sendMessage(
-            "[ AI ]\n\n" +
+            "[ AI Gemini ]\n\n" +
             "please wait...",
             threadID,
             (err, info) => {
                 if (err) return;
 
-                axios.get(`${global.NashBot.JOSHUA}api/gpt4?query=${encodeURIComponent(prompt)}`)
+                axios.get(`${global.NashBot.JOSHUA}api/gemini?query=${encodeURIComponent(prompt)}`)
                     .then(response => {
                         const reply = response.data.response;
                         api.editMessage(

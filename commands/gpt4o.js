@@ -1,32 +1,17 @@
 const axios = require("axios");
 
-async function gpt4o(q, uid) {
-    try {
-        const response = await axios.get(`${global.NashBot.JOSHUA}gpt4o-v2?ask=${encodeURIComponent(q)}&id=${uid}`);
-        if (response.data.status) {
-            return response.data.response;
-        } else {
-            return "Failed to get a proper response.";
-        }
-    } catch (error) {
-        console.error("Error fetching data:", error.message);
-        return "Failed to fetch data. Please try again later.";
-    }
-}
-
 module.exports = {
     name: "gpt4o",
-    description: "Talk to GPT4 (v2 conversational)",
+    description: "Interact with GPT-4o Pro",
     nashPrefix: false,
-    version: "1.0.3",
-    role: 0,
+    version: "1.0.0",
     cooldowns: 5,
-    aliases: ["ai"],
+    aliases: ["gpt4o"],
     execute(api, event, args, prefix) {
         const { threadID, messageID, senderID } = event;
         let prompt = args.join(" ");
         if (!prompt) return api.sendMessage("Please enter a prompt.", threadID, messageID);
-        
+
         if (!global.handle) {
             global.handle = {};
         }
@@ -35,28 +20,31 @@ module.exports = {
         }
 
         api.sendMessage(
-            "[ Gpt4o ]\n\n" +
-            "⏳ Searching for answer...",
+            "[ GPT-4o Pro ]\n\n" +
+            "please wait...",
             threadID,
-            async (err, info) => {
+            (err, info) => {
                 if (err) return;
-                try {
-                    const response = await gpt4o(prompt, senderID);
-                    api.editMessage(
-                        "[ Gpt4o ]\n\n" +
-                        response,
-                        info.messageID
-                    );
-                    global.handle.replies[info.messageID] = {
-                        cmdname: module.exports.name,
-                        this_mid: info.messageID,
-                        this_tid: info.threadID,
-                        tid: threadID,
-                        mid: messageID,
-                    };
-                } catch (g) {
-                    api.sendMessage("Error processing your request: " + g.message, threadID);
-                }
+
+                axios.get(`https://kaiz-apis.gleeze.com/api/gpt-4o-pro?q=${encodeURIComponent(prompt)}&uid=${senderID}&imageUrl=`)
+                    .then(response => {
+                        const reply = response.data.response;
+                        api.editMessage(
+                            reply,
+                            info.messageID
+                        );
+                        global.handle.replies[info.messageID] = {
+                            cmdname: module.exports.name,
+                            this_mid: info.messageID,
+                            this_tid: info.threadID,
+                            tid: threadID,
+                            mid: messageID,
+                        };
+                    })
+                    .catch(error => {
+                        console.error("Error fetching data:", error.message);
+                        api.editMessage("Failed to fetch data. Please try again later.", info.messageID);
+                    });
             },
             messageID
         );

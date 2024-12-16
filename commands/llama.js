@@ -1,8 +1,8 @@
 const axios = require("axios");
 
 module.exports = {
-    name: "ai",
-    description: "interact with gpt4",
+    name: "llama",
+    description: "Interact with Llama",
     nashPrefix: false,
     version: "1.0.0",
     cooldowns: 5,
@@ -20,13 +20,13 @@ module.exports = {
         }
 
         api.sendMessage(
-            "[ AI ]\n\n" +
+            "[ LLAMA ]\n\n" +
             "please wait...",
             threadID,
             (err, info) => {
                 if (err) return;
 
-                axios.get(`${global.NashBot.JOSHUA}api/gpt4?query=${encodeURIComponent(prompt)}`)
+                axios.get(`${global.NashBot.JOSHUA}api/llama-3.2-11b-vision-preview?query=${encodeURIComponent(prompt)}`)
                     .then(response => {
                         const reply = response.data.response;
                         api.editMessage(

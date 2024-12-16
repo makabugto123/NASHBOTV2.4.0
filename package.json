@@ -21,7 +21,7 @@
     "express": "^4.21.0",
     "fs-extra": "^11.2.0",
     "gradient-string": "^3.0.0",
-    "jimp": "^1.6.0",
+    "jimp": "^0.16.1",
     "josh-fca": "^1.0.4",
     "node-cron": "^3.0.3",
     "pastebin-api": "^7.0.0",

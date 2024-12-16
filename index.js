@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const login = require("josh-fca");
 const fs = require("fs");
-const detectTyping = require("./handle/detectTyping");
 const autoReact = require("./handle/autoReact");
 const unsendReact = require("./handle/unsendReact");
 const chalk = require("chalk");
@@ -23,7 +22,7 @@ global.NashBoT = {
 };
 
 global.NashBot = {
-  JOSHUA: "https://rest-api.joshuaapostol.site/"
+  JOSHUA: "https://nash-api-vrx5.onrender.com/"
 };
 
 let isLoggedIn = false;
@@ -53,7 +52,7 @@ const loadModules = (type) => {
   });
 };
 
-const autoLogin = async () => {
+const AutoLogin = async () => {
   if (isLoggedIn) return;
 
   const appStatePath = path.join(__dirname, "appstate.json");
@@ -98,7 +97,7 @@ const retryLogin = () => {
     chalk.bold.yellowBright(`Retrying login attempt ${loginAttempts} of ${MAX_RETRIES}...`)
   );
 
-  setTimeout(autoLogin, RETRY_INTERVAL);
+  setTimeout(AutoLogin, RETRY_INTERVAL);
 };
 
 const setupBot = (api, prefix) => {
@@ -124,7 +123,6 @@ const setupBot = (api, prefix) => {
 
     handleMessage(api, event, prefix);
     handleEvent(api, event, prefix);
-    detectTyping(api, event);
     autoReact(api, event);
     unsendReact(api, event);
   });
@@ -168,7 +166,7 @@ const handleMessage = async (api, event, prefix) => {
 
     const userId = event.senderID;
     if (cmdFile.role === "admin" && userId !== config.adminUID) {
-      return api.sendMessage("You lack admin privileges.", event.threadID);
+      return api.sendMessage("You don't have permission to use this commands", event.threadID);
     }
 
     try {
@@ -182,7 +180,7 @@ const handleMessage = async (api, event, prefix) => {
 const init = async () => {
   await loadModules("commands");
   await loadModules("events");
-  await autoLogin();
+  await AutoLogin();
   console.log(chalk.bold.blueBright("──BOT START──●"));
   console.log(chalk.bold.red(`
  █▄░█ ▄▀█ █▀ █░█
